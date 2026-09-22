@@ -37,15 +37,8 @@ export const talento = defineType({
       name: 'fechaNacimiento',
       title: 'Fecha de nacimiento',
       type: 'date',
-      description:
-        'Uso interno. La edad pública se calcula a partir de este dato solo si "Mostrar edad" está activo.',
+      description: 'La edad pública se calcula y se muestra siempre a partir de este dato.',
       validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'mostrarEdad',
-      title: 'Mostrar edad públicamente',
-      type: 'boolean',
-      initialValue: false,
     }),
     defineField({
       name: 'fotografiaPrincipal',
@@ -74,6 +67,13 @@ export const talento = defineType({
       title: 'Biografía ampliada',
       type: 'array',
       of: [defineArrayMember({type: 'block'})],
+    }),
+    defineField({
+      name: 'frase',
+      title: 'Frase / filosofía',
+      type: 'string',
+      description:
+        'Cita corta que define su carrera, ej. "Ganar antes de ganar." Opcional.',
     }),
     defineField({
       name: 'hitos',
@@ -260,6 +260,7 @@ export const talento = defineType({
             }),
           ],
         }),
+        defineArrayMember({type: 'videoBunny'}),
       ],
     }),
     defineField({
@@ -292,6 +293,13 @@ export const talento = defineType({
       title: 'Destacado en Inicio',
       type: 'boolean',
       initialValue: false,
+    }),
+    defineField({
+      name: 'orden',
+      title: 'Orden de aparición',
+      type: 'number',
+      description:
+        'Solo se usa si hay más de 4 talentos marcados "Destacado en Inicio" a la vez, para decidir cuáles 4 se muestran. Menor número aparece primero. Opcional.',
     }),
     defineField({
       name: 'seo',

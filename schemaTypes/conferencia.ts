@@ -75,6 +75,13 @@ export const conferencia = defineType({
       ],
     }),
     defineField({
+      name: 'video',
+      title: 'Video',
+      type: 'videoBunny',
+      description:
+        'Video de la conferencia, alojado en Bunny Stream. Antes decisión abierta #12; queda resuelta: sí se admite un video por conferencia.',
+    }),
+    defineField({
       name: 'notaComercial',
       title: 'Nota comercial',
       type: 'string',
