@@ -1,4 +1,4 @@
-import {defineConfig} from 'sanity'
+import {defineConfig, isDev} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
@@ -16,7 +16,12 @@ export default defineConfig({
   projectId: 'ugd8kors',
   dataset: 'production',
 
-  plugins: [structureTool({structure}), visionTool()],
+  // Vision ejecuta GROQ arbitrario contra el dataset, así que solo se registra en local.
+  // `isDev` lo exporta Sanity y equivale a process.env.NODE_ENV !== 'production'. Ojo:
+  // el bundler resuelve la condición y deja el array en [structureTool], pero el código
+  // de Vision sigue viajando en el build — lo que desaparece es la herramienta, no el
+  // peso. Para sacarlo del bundle haría falta un import dinámico.
+  plugins: [structureTool({structure}), ...(isDev ? [visionTool()] : [])],
 
   schema: {
     types: schemaTypes,
