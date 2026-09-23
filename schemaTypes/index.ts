@@ -1,4 +1,5 @@
 import {conferencia} from './conferencia'
+import {configuracionSitio} from './configuracionSitio'
 import {medios} from './medios'
 import {noticia} from './noticia'
 import {proyecto} from './proyecto'
@@ -7,4 +8,14 @@ import {sponsor} from './sponsor'
 import {talento} from './talento'
 import {videoBunny} from './videoBunny'
 
-export const schemaTypes = [seo, videoBunny, sponsor, talento, noticia, proyecto, conferencia, medios]
+export const schemaTypes = [
+  seo,
+  videoBunny,
+  sponsor,
+  talento,
+  noticia,
+  proyecto,
+  conferencia,
+  medios,
+  configuracionSitio,
+]

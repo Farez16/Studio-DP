@@ -2,12 +2,13 @@ import {defineConfig, isDev} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
-import {structure} from './structure'
+import {SINGLETON_TYPES, structure} from './structure'
 
 // Tipos singleton: una única entrada editable en el Desk, sin acción de crear
-// documentos adicionales de ese tipo (decisión #39). Reutilizable para futuros
-// singletons (ej. siteSettings) agregando su nombre aquí.
-const singletonTypes = new Set(['medios'])
+// documentos adicionales de ese tipo (decisión #39). La lista vive en structure.ts,
+// junto a las entradas del Desk que la consumen — agregar el siguiente singleton es
+// tocar un solo archivo.
+const singletonTypes = SINGLETON_TYPES
 
 export default defineConfig({
   name: 'default',
