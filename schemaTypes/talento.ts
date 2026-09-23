@@ -11,7 +11,12 @@ export const talento = defineType({
       name: 'nombre',
       title: 'Nombre',
       type: 'string',
-      validation: (Rule) => Rule.required(),
+      // Array de reglas a propósito: encadenar .warning() sobre Rule.required() bajaría
+      // también el required a advertencia. Mismo motivo en el resto de los límites.
+      validation: (Rule) => [
+        Rule.required(),
+        Rule.max(30).warning('Arriba de 30 caracteres el nombre desborda las tarjetas del roster.'),
+      ],
     }),
     defineField({
       name: 'slug',
@@ -24,7 +29,12 @@ export const talento = defineType({
       name: 'disciplina',
       title: 'Disciplina',
       type: 'string',
-      validation: (Rule) => Rule.required(),
+      validation: (Rule) => [
+        Rule.required(),
+        Rule.max(40).warning(
+          'Arriba de 40 caracteres la disciplina desborda las tarjetas del roster.',
+        ),
+      ],
     }),
     defineField({
       name: 'ubicacion',
@@ -56,11 +66,40 @@ export const talento = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'fotografiaHero',
+      title: 'Fotografía del hero',
+      type: 'image',
+      options: {hotspot: true},
+      description:
+        'Foto de acción para el hero del perfil (apaisada). Si se deja vacía, el hero usa fotografiaPrincipal como respaldo.',
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Texto alternativo',
+          type: 'string',
+          // La imagen es opcional, pero el alt deja de serlo en cuanto se carga.
+          validation: (Rule) =>
+            Rule.custom((alt, context) => {
+              const imagen = context.parent as {asset?: {_ref?: string}} | undefined
+              if (imagen?.asset?._ref && !alt) {
+                return 'Escribe el texto alternativo de la foto del hero.'
+              }
+              return true
+            }),
+        }),
+      ],
+    }),
+    defineField({
       name: 'bioCorta',
       title: 'Biografía corta',
       type: 'text',
       rows: 4,
-      validation: (Rule) => Rule.required(),
+      validation: (Rule) => [
+        Rule.required(),
+        Rule.max(400).warning(
+          'Arriba de 400 caracteres la biografía corta deja de serlo; lo ideal es quedarse por debajo de 300.',
+        ),
+      ],
     }),
     defineField({
       name: 'bioAmpliada',
@@ -74,6 +113,8 @@ export const talento = defineType({
       type: 'string',
       description:
         'Cita corta que define su carrera, ej. "Ganar antes de ganar." Opcional.',
+      validation: (Rule) =>
+        Rule.max(120).warning('Arriba de 120 caracteres la frase deja de leerse como una cita.'),
     }),
     defineField({
       name: 'hitos',
@@ -167,9 +208,31 @@ export const talento = defineType({
               name: 'red',
               title: 'Red social',
               type: 'string',
-              description:
-                'Ej: Instagram, TikTok, YouTube. Usar el mismo nombre de forma consistente entre talentos.',
+              options: {
+                list: [
+                  {title: 'Instagram', value: 'Instagram'},
+                  {title: 'TikTok', value: 'TikTok'},
+                  {title: 'YouTube', value: 'YouTube'},
+                  {title: 'Otro', value: 'Otro'},
+                ],
+                layout: 'dropdown',
+              },
               validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: 'redPersonalizada',
+              title: 'Nombre de la red',
+              type: 'string',
+              description: 'Nombre de la red, solo si elegiste Otro.',
+              hidden: ({parent}) => (parent as {red?: string} | undefined)?.red !== 'Otro',
+              validation: (Rule) =>
+                Rule.custom((valor, context) => {
+                  const hermanos = context.parent as {red?: string} | undefined
+                  if (hermanos?.red === 'Otro' && !valor?.trim()) {
+                    return 'Escribe el nombre de la red cuando eliges "Otro".'
+                  }
+                  return true
+                }),
             }),
             defineField({
               name: 'url',
@@ -230,7 +293,12 @@ export const talento = defineType({
             }),
           ],
           preview: {
-            select: {title: 'red', subtitle: 'handle'},
+            select: {red: 'red', personalizada: 'redPersonalizada', handle: 'handle'},
+            // Sin esto, toda entrada con red 'Otro' se listaría como "Otro".
+            prepare: ({red, personalizada, handle}) => ({
+              title: red === 'Otro' ? personalizada || red : red,
+              subtitle: handle,
+            }),
           },
         }),
       ],

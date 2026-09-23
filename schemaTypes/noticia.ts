@@ -11,7 +11,14 @@ export const noticia = defineType({
       name: 'titulo',
       title: 'Título',
       type: 'string',
-      validation: (Rule) => Rule.required(),
+      // Array de reglas a propósito: encadenar .warning() sobre Rule.required() bajaría
+      // también el required a advertencia.
+      validation: (Rule) => [
+        Rule.required(),
+        Rule.max(90).warning(
+          'Arriba de 90 caracteres el título desborda las tarjetas de noticias.',
+        ),
+      ],
     }),
     defineField({
       name: 'slug',
@@ -39,7 +46,12 @@ export const noticia = defineType({
       title: 'Extracto',
       type: 'text',
       rows: 3,
-      validation: (Rule) => Rule.required(),
+      validation: (Rule) => [
+        Rule.required(),
+        Rule.max(130).error(
+          'La tarjeta de noticias recorta el extracto a 3 líneas: arriba de 130 caracteres el final no se lee en el sitio.',
+        ),
+      ],
     }),
     defineField({
       name: 'cuerpo',
