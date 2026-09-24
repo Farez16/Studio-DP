@@ -32,8 +32,34 @@ export const noticia = defineType({
       title: 'Categoría',
       type: 'string',
       description:
-        'Texto libre, sin lista cerrada (categorías finales aún no confirmadas). Valores en uso hoy: Deportes, Conferencias.',
+        'Categoría de la noticia. Elige "Otro" y completa el campo siguiente si ninguna encaja.',
+      options: {
+        list: [
+          {title: 'Deportes', value: 'Deportes'},
+          {title: 'Conferencias', value: 'Conferencias'},
+          {title: 'Proyectos', value: 'Proyectos'},
+          {title: 'Institucional', value: 'Institucional'},
+          {title: 'Otro', value: 'Otro'},
+        ],
+        layout: 'dropdown',
+      },
       validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'categoriaPersonalizada',
+      title: 'Nombre de la categoría',
+      type: 'string',
+      description: 'Nombre de la categoría, solo si elegiste Otro.',
+      hidden: ({document}) =>
+        (document as {categoria?: string} | undefined)?.categoria !== 'Otro',
+      validation: (Rule) =>
+        Rule.custom((valor, context) => {
+          const doc = context.document as {categoria?: string} | undefined
+          if (doc?.categoria === 'Otro' && !valor?.trim()) {
+            return 'Escribe el nombre de la categoría cuando eliges "Otro".'
+          }
+          return true
+        }),
     }),
     defineField({
       name: 'fecha',
