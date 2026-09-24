@@ -327,6 +327,15 @@ export const talento = defineType({
       name: 'galeria',
       title: 'Galería',
       type: 'array',
+      description:
+        'Mínimo 6 elementos, contando fotos y videos juntos: pueden ser 6 fotos, 6 videos o cualquier mezcla que sume 6.',
+      // Bloqueante a propósito (.error(), no .warning()): una galería a medio llenar se
+      // ve peor en la ficha que una vacía, porque la grilla queda coja. El mínimo cuenta
+      // el largo del array completo, sin distinguir fotos de videos.
+      validation: (Rule) =>
+        Rule.min(6).error(
+          'La galería necesita al menos 6 elementos. El mínimo cuenta fotos y videos juntos: pueden ser 6 fotos, 6 videos o cualquier mezcla que sume 6.',
+        ),
       of: [
         defineArrayMember({
           type: 'image',
