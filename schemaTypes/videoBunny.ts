@@ -26,7 +26,8 @@ export const videoBunny = defineType({
       title: 'Miniatura',
       type: 'image',
       options: {hotspot: true},
-      description: 'Opcional. Solo si se necesita una miniatura distinta a la que genera Bunny Stream automáticamente.',
+      description:
+        'Recomendada. Hoy el sitio no lee la miniatura automática de Bunny Stream: sin esta imagen, el video aparece en la galería como un recuadro oscuro con un ícono de play y la vista ampliada queda sin nada que mostrar.',
       fields: [
         defineField({
           name: 'alt',
