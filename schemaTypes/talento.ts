@@ -41,7 +41,7 @@ export const talento = defineType({
       title: 'Ubicación',
       type: 'string',
       description:
-        'Ciudad base o de entrenamiento. Se publica públicamente solo si el deportista autoriza mostrarla.',
+        'Ciudad base o de entrenamiento. Se publica siempre en la ficha pública, junto a la edad. Si se deja vacía, la ficha muestra solo la edad.',
     }),
     defineField({
       name: 'fechaNacimiento',
@@ -388,7 +388,7 @@ export const talento = defineType({
       title: 'Orden de aparición',
       type: 'number',
       description:
-        'Solo se usa si hay más de 4 talentos marcados "Destacado en Inicio" a la vez, para decidir cuáles 4 se muestran. Menor número aparece primero. Opcional.',
+        'Ordena a los talentos marcados "Destacado en Inicio": menor número aparece primero. Se aplica siempre que haya más de uno, no solo cuando sobran. Como el Inicio muestra 4 como máximo, si hay más de 4 destacados este número decide además cuáles 4 entran. Los que se dejan vacíos van al final. Opcional.',
     }),
     defineField({
       name: 'seo',
