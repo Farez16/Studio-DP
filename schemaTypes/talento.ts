@@ -249,6 +249,8 @@ export const talento = defineType({
               name: 'metricas',
               title: 'Métricas históricas',
               type: 'array',
+              description:
+                'Agrega una entrada nueva cada vez que quieras actualizar los números, en vez de editar la anterior: el sitio siempre muestra la más reciente por fecha de referencia y las viejas quedan como histórico.',
               of: [
                 defineArrayMember({
                   type: 'object',
@@ -258,30 +260,40 @@ export const talento = defineType({
                       name: 'fechaReferencia',
                       title: 'Fecha de referencia',
                       type: 'date',
+                      description:
+                        'Fecha en la que tomaste esta captura de la métrica (ej. hoy). Es la que decide cuál entrada muestra el sitio: gana la más reciente.',
                       validation: (Rule) => Rule.required(),
                     }),
                     defineField({
                       name: 'seguidores',
                       title: 'Seguidores',
                       type: 'number',
+                      description:
+                        'Número completo, sin abreviar y sin separadores de miles. Ej. si tiene 82 mil seguidores, escribe 82000 — no 82, ni 82k, ni 82.661. El sitio lo abrevia solo al mostrarlo. Es el total acumulado de la cuenta, no el del período.',
                       validation: (Rule) => Rule.min(0),
                     }),
                     defineField({
                       name: 'visualizaciones',
                       title: 'Visualizaciones',
                       type: 'number',
+                      description:
+                        'Número completo, sin abreviar y sin separadores de miles. Ej. 2,38 millones se escribe 2380000 — no 2.38 ni 2,38M. A diferencia de los seguidores, cuenta solo el período de referencia: usa siempre el mismo (los últimos 90 días antes de la fecha de arriba) en esta cifra, en interacciones y en me gusta.',
                       validation: (Rule) => Rule.min(0),
                     }),
                     defineField({
                       name: 'interacciones',
                       title: 'Interacciones',
                       type: 'number',
+                      description:
+                        'Número completo, sin abreviar y sin separadores de miles. Ej. 103 mil interacciones se escribe 103000 — no 103 ni 103.136. Cuenta solo el período de referencia, el mismo que usaste en visualizaciones.',
                       validation: (Rule) => Rule.min(0),
                     }),
                     defineField({
                       name: 'meGusta',
                       title: 'Me gusta',
                       type: 'number',
+                      description:
+                        'Número completo, sin abreviar y sin separadores de miles. Ej. 42,8 mil me gusta se escribe 42800 — no 42.8 ni 42,8K. Cuenta solo el período de referencia, el mismo que usaste en visualizaciones.',
                       validation: (Rule) => Rule.min(0),
                     }),
                   ],
