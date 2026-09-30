@@ -45,6 +45,27 @@ export const videoBunny = defineType({
         'Se llena automáticamente al publicar; no se escribe a mano. Si después de publicar sigue vacío, la copia a Bunny Stream falló — avisá a quien mantiene el sitio.',
     }),
     defineField({
+      name: 'dimensiones',
+      title: 'Dimensiones del video',
+      type: 'object',
+      readOnly: true,
+      /**
+       * Oculto, al revés que `videoId`. Ese se muestra porque es el indicador de que la
+       * automatización corrió y le sirve al editor; esto es dato de máquina puro —lo usa
+       * el sitio para darle al reproductor la proporción real en vez de forzar 16:9— y
+       * mostrarlo solo agregaría ruido a la ficha.
+       *
+       * Puede estar vacío por un rato: Bunny recién sabe el ancho y el alto cuando
+       * termina de codificar, y eso tarda minutos. Ver la function `bunny-stream-dimensiones`
+       * en el repo DP-Infra, que las completa después. Mientras tanto el sitio cae a 16:9.
+       */
+      hidden: true,
+      fields: [
+        defineField({name: 'ancho', title: 'Ancho', type: 'number'}),
+        defineField({name: 'alto', title: 'Alto', type: 'number'}),
+      ],
+    }),
+    defineField({
       name: 'titulo',
       title: 'Título',
       type: 'string',
