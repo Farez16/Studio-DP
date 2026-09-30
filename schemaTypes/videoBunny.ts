@@ -1,6 +1,20 @@
 import {defineField, defineType} from 'sanity'
 import {PlayIcon} from '@sanity/icons/Play'
 
+/**
+ * Video alojado en Bunny Stream.
+ *
+ * Se usa en dos lugares —`conferencia.video` (un objeto) y `talento.galeria[]` (como
+ * miembro de array, mezclado con fotos)— así que cualquier cambio acá toca los dos.
+ *
+ * El editor ya no escribe el GUID a mano: sube el archivo en `archivo` y una Sanity
+ * Function (repo `DP-Infra`, blueprint `dp-agencia-deportiva`) se lo pasa a Bunny por
+ * `POST /library/{id}/videos/fetch` y escribe el `videoId` que Bunny devuelve.
+ *
+ * Detalle importante de por qué esto funciona: `readOnly` es una restricción de la
+ * interfaz del Studio, no del dataset. La Function escribe con su propio token y no la
+ * ve, así que puede llenar `videoId` aunque el editor no pueda.
+ */
 export const videoBunny = defineType({
   name: 'videoBunny',
   title: 'Video (Bunny Stream)',
@@ -8,12 +22,27 @@ export const videoBunny = defineType({
   icon: PlayIcon,
   fields: [
     defineField({
-      name: 'videoId',
-      title: 'ID del video',
-      type: 'string',
+      name: 'archivo',
+      title: 'Archivo de video',
+      type: 'file',
+      options: {accept: 'video/*'},
       description:
-        'GUID del video en Bunny Stream (Dashboard → biblioteca de video → el video → "Video ID").',
-      validation: (Rule) => Rule.required(),
+        'Subí el archivo acá y listo: al publicar se copia solo a Bunny Stream y el "ID del video" de abajo se llena por su cuenta. El archivo queda guardado también en Sanity a propósito, para poder rehacer la copia el día que se pase a la cuenta de Bunny del cliente. Para cambiar un video ya copiado no alcanza con reemplazar el archivo: borrá el bloque de video completo y creá uno nuevo.',
+    }),
+    defineField({
+      name: 'videoId',
+      title: 'ID del video en Bunny Stream',
+      type: 'string',
+      readOnly: true,
+      /**
+       * Antes era `validation: Rule.required()` y lo escribía el editor. Ya no:
+       * exigirlo bloquearía publicar justamente en el momento en que todavía no puede
+       * existir, porque la Function corre *después* de publicar. El campo queda visible
+       * aunque no se pueda editar porque es el único indicador de que la automatización
+       * corrió: si después de publicar sigue vacío, algo falló.
+       */
+      description:
+        'Se llena automáticamente al publicar; no se escribe a mano. Si después de publicar sigue vacío, la copia a Bunny Stream falló — avisá a quien mantiene el sitio.',
     }),
     defineField({
       name: 'titulo',
@@ -40,9 +69,16 @@ export const videoBunny = defineType({
     }),
   ],
   preview: {
-    select: {title: 'titulo', media: 'miniatura'},
-    prepare({title, media}) {
-      return {title: title || 'Video (Bunny Stream)', media}
+    select: {title: 'titulo', media: 'miniatura', videoId: 'videoId', archivo: 'archivo.asset'},
+    prepare({title, media, videoId, archivo}) {
+      // El subtítulo es el mismo indicador que la descripción de `videoId` promete, pero
+      // legible desde la lista de la galería de talento, donde los campos no se ven.
+      const estado = videoId
+        ? 'en Bunny Stream'
+        : archivo
+          ? 'pendiente de copiar a Bunny Stream'
+          : 'sin archivo'
+      return {title: title || 'Video (Bunny Stream)', subtitle: estado, media}
     },
   },
 })
