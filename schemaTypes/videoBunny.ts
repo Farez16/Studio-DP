@@ -19,7 +19,8 @@ export const videoBunny = defineType({
       name: 'titulo',
       title: 'Título',
       type: 'string',
-      description: 'Uso interno: accesibilidad y contexto. No necesariamente se muestra como encabezado visible.',
+      description:
+        'Uso interno: accesibilidad y contexto. No necesariamente se muestra como encabezado visible.',
     }),
     defineField({
       name: 'miniatura',

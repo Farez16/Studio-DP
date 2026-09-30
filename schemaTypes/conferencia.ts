@@ -18,7 +18,8 @@ export const conferencia = defineType({
       title: 'Slug',
       type: 'slug',
       options: {source: 'titulo', maxLength: 96},
-      description: 'Preventivo: la ruta pública de detalle todavía no está confirmada (decisión abierta #11).',
+      description:
+        'Preventivo: la ruta pública de detalle todavía no está confirmada (decisión abierta #11).',
     }),
     defineField({
       name: 'descripcion',

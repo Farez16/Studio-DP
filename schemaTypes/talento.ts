@@ -111,8 +111,7 @@ export const talento = defineType({
       name: 'frase',
       title: 'Frase / filosofía',
       type: 'string',
-      description:
-        'Cita corta que define su carrera, ej. "Ganar antes de ganar." Opcional.',
+      description: 'Cita corta que define su carrera, ej. "Ganar antes de ganar." Opcional.',
       validation: (Rule) =>
         Rule.max(120).warning('Arriba de 120 caracteres la frase deja de leerse como una cita.'),
     }),
@@ -314,8 +313,7 @@ export const talento = defineType({
           },
         }),
       ],
-      validation: (Rule) =>
-        Rule.min(1).warning('Se recomienda registrar al menos una red social.'),
+      validation: (Rule) => Rule.min(1).warning('Se recomienda registrar al menos una red social.'),
     }),
     defineField({
       name: 'sponsors',

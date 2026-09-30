@@ -50,8 +50,7 @@ export const noticia = defineType({
       title: 'Nombre de la categoría',
       type: 'string',
       description: 'Nombre de la categoría, solo si elegiste Otro.',
-      hidden: ({document}) =>
-        (document as {categoria?: string} | undefined)?.categoria !== 'Otro',
+      hidden: ({document}) => (document as {categoria?: string} | undefined)?.categoria !== 'Otro',
       validation: (Rule) =>
         Rule.custom((valor, context) => {
           const doc = context.document as {categoria?: string} | undefined

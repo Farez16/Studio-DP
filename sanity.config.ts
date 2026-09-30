@@ -38,8 +38,6 @@ export default defineConfig({
     },
     // Evita "Duplicar" en un singleton, que crearía un segundo documento del mismo tipo.
     actions: (prev, {schemaType}) =>
-      singletonTypes.has(schemaType)
-        ? prev.filter(({action}) => action !== 'duplicate')
-        : prev,
+      singletonTypes.has(schemaType) ? prev.filter(({action}) => action !== 'duplicate') : prev,
   },
 })
