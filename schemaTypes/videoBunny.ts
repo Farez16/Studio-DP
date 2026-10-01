@@ -78,8 +78,16 @@ export const videoBunny = defineType({
       title: 'Miniatura',
       type: 'image',
       options: {hotspot: true},
+      /**
+       * Opcional de verdad: no lleva `required`, y el `alt` obligatorio de abajo solo se
+       * valida si hay imagen. Sin ella el sitio arma la miniatura automática de Bunny
+       * (`https://<hostname del CDN>/<videoId>/thumbnail.jpg`, un fotograma del video) a
+       * partir del `videoId`, así que hasta que la Function lo escribe no hay miniatura
+       * automática y el sitio cae a su respaldo (la foto del talento en la conferencia, el
+       * recuadro con el ícono de play en la galería).
+       */
       description:
-        'Recomendada. Hoy el sitio no lee la miniatura automática de Bunny Stream: sin esta imagen, el video aparece en la galería como un recuadro oscuro con un ícono de play y la vista ampliada queda sin nada que mostrar.',
+        'Opcional. Si no subís una imagen, el sitio usa la miniatura automática que genera Bunny Stream (un fotograma del video). Subila solo si querés mostrar otra imagen en lugar de esa.',
       fields: [
         defineField({
           name: 'alt',
