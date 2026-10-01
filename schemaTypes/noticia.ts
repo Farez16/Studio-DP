@@ -100,6 +100,31 @@ export const noticia = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'video',
+      title: 'Video',
+      type: 'array',
+      description:
+        'Opcional. Un video (Bunny Stream) que se muestra debajo de la portada; la portada sigue siendo obligatoria. Para quitarlo o cambiarlo, borra el elemento.',
+      /**
+       * Array de un solo elemento y no un objeto `videoBunny` suelto, aunque una noticia
+       * lleve un único video. El motivo es poder borrarlo: el Studio no le da a un campo
+       * objeto ninguna acción para vaciarlo (las únicas por defecto son copiar y pegar), y
+       * `videoId` es de solo lectura. Con un objeto suelto, una vez que la Function escribe
+       * el `videoId` el editor ya no puede quitar ese video ni cambiarlo — reemplazar el
+       * archivo no vuelve a disparar la copia (ver `archivo` en videoBunny.ts). Borrar el
+       * elemento del array es lo que sí funciona, igual que en `conferencia.medio[]`.
+       *
+       * A diferencia de `medio[]`, acá no hay opción de imagen: la portada es un campo
+       * aparte y obligatorio porque la usan la tarjeta, el detalle y la imagen OG.
+       *
+       * `disableActions` por lo mismo que en `medio[]`: "duplicar" y "copiar" se saltan el
+       * `max(1)`.
+       */
+      options: {disableActions: ['duplicate', 'copy']},
+      validation: (Rule) => Rule.max(1).error('Solo se admite un video por noticia.'),
+      of: [defineArrayMember({type: 'videoBunny'})],
+    }),
+    defineField({
       name: 'talentosRelacionados',
       title: 'Talentos relacionados',
       type: 'array',

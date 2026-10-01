@@ -4,9 +4,9 @@ import {PlayIcon} from '@sanity/icons/Play'
 /**
  * Video alojado en Bunny Stream.
  *
- * Se usa en dos lugares —`conferencia.medio[]` (máximo un elemento, imagen o video) y
- * `talento.galeria[]` (mezclado con fotos)—, los dos como miembro de array, así que
- * cualquier cambio acá toca los dos.
+ * Se usa en tres lugares —`conferencia.medio[]` (máximo un elemento, imagen o video),
+ * `talento.galeria[]` (mezclado con fotos) y `noticia.video[]` (máximo un elemento, solo
+ * video)—, los tres como miembro de array, así que cualquier cambio acá toca los tres.
  *
  * El editor ya no escribe el GUID a mano: sube el archivo en `archivo` y una Sanity
  * Function (repo `DP-Infra`, blueprint `dp-agencia-deportiva`) se lo pasa a Bunny por
@@ -84,7 +84,8 @@ export const videoBunny = defineType({
        * (`https://<hostname del CDN>/<videoId>/thumbnail.jpg`, un fotograma del video) a
        * partir del `videoId`, así que hasta que la Function lo escribe no hay miniatura
        * automática y el sitio cae a su respaldo (la foto del talento en la conferencia, el
-       * recuadro con el ícono de play en la galería).
+       * recuadro con el ícono de play en la galería). En la noticia no hace falta respaldo:
+       * el reproductor recién se dibuja cuando hay `videoId`.
        */
       description:
         'Opcional. Si no subís una imagen, el sitio usa la miniatura automática que genera Bunny Stream (un fotograma del video). Subila solo si querés mostrar otra imagen en lugar de esa.',
