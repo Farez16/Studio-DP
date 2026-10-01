@@ -95,11 +95,37 @@ export const conferencia = defineType({
       ],
     }),
     defineField({
-      name: 'video',
-      title: 'Video',
-      type: 'videoBunny',
+      name: 'medio',
+      title: 'Medio',
+      type: 'array',
       description:
-        'Video de la conferencia, alojado en Bunny Stream. Antes decisión abierta #12; queda resuelta: sí se admite un video por conferencia.',
+        'Una imagen o un video (Bunny Stream), no ambos. Si queda vacío, la página usa la foto del talento.',
+      /**
+       * Array de un solo elemento en vez de dos campos sueltos: así "imagen o video, no
+       * ambos" lo garantiza la forma del dato y no una validación cruzada.
+       *
+       * El tope lo aplica el Studio deshabilitando "agregar" cuando se alcanza `max`, pero
+       * "duplicar" inserta sin mirar ese tope, y "copiar" permite pegar el ítem de vuelta.
+       * Por eso se apagan las dos. Va en las opciones del array y no en los tipos miembro
+       * porque el Studio lee `disableActions` del array padre (verificado en sanity 6.15).
+       */
+      options: {disableActions: ['duplicate', 'copy']},
+      validation: (Rule) => Rule.max(1).error('Solo se admite un medio: una imagen o un video.'),
+      of: [
+        defineArrayMember({
+          type: 'image',
+          options: {hotspot: true},
+          fields: [
+            defineField({
+              name: 'alt',
+              title: 'Texto alternativo',
+              type: 'string',
+              validation: (Rule) => Rule.required(),
+            }),
+          ],
+        }),
+        defineArrayMember({type: 'videoBunny'}),
+      ],
     }),
     defineField({
       name: 'notaComercial',

@@ -4,8 +4,9 @@ import {PlayIcon} from '@sanity/icons/Play'
 /**
  * Video alojado en Bunny Stream.
  *
- * Se usa en dos lugares —`conferencia.video` (un objeto) y `talento.galeria[]` (como
- * miembro de array, mezclado con fotos)— así que cualquier cambio acá toca los dos.
+ * Se usa en dos lugares —`conferencia.medio[]` (máximo un elemento, imagen o video) y
+ * `talento.galeria[]` (mezclado con fotos)—, los dos como miembro de array, así que
+ * cualquier cambio acá toca los dos.
  *
  * El editor ya no escribe el GUID a mano: sube el archivo en `archivo` y una Sanity
  * Function (repo `DP-Infra`, blueprint `dp-agencia-deportiva`) se lo pasa a Bunny por
