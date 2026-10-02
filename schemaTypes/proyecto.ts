@@ -28,6 +28,15 @@ export const proyecto = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'frase',
+      title: 'Frase / lema',
+      type: 'string',
+      description:
+        'Lema corto del proyecto, ej. "Apoyamos sueños, construimos campeones." El frontend lo muestra destacado debajo de la descripción. Opcional.',
+      validation: (Rule) =>
+        Rule.max(120).warning('Arriba de 120 caracteres la frase deja de leerse como un lema.'),
+    }),
+    defineField({
       name: 'logo',
       title: 'Logo',
       type: 'image',
