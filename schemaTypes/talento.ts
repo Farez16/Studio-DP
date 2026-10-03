@@ -102,12 +102,6 @@ export const talento = defineType({
       ],
     }),
     defineField({
-      name: 'bioAmpliada',
-      title: 'Biografía ampliada',
-      type: 'array',
-      of: [defineArrayMember({type: 'block'})],
-    }),
-    defineField({
       name: 'frase',
       title: 'Frase / filosofía',
       type: 'string',
